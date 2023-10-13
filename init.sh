@@ -28,4 +28,6 @@ yarn add class-validator class-transformer                    #? ANNOTATIONS FOR
 yarn add typeorm @nestjs/typeorm pg                           #? DATABASE CONNECTOR
 yarn add bcrypt                                               #? HASHER
 yarn add @nestjs/jwt @nestjs/passport passport passport-jwt   #? TOKEN
-yarn add @types/passport-jwt
+yarn add @types/passport-jwt                                  #? TOKEN 2
+yarn add cross-env                                            #? ENVIRONMENT VARIABLES
+yarn add @nestjs/config                                       #? ENVIRONMENT VARIABLES 2

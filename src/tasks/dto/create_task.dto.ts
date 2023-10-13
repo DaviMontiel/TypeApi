@@ -6,4 +6,6 @@ export class CreateTaskDto {
 
   @IsNotEmpty()
   description: string;
+
+  timer: string;
 }

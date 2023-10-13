@@ -1,13 +1,34 @@
-import { Controller, Post, Body, UseGuards, Req, Param } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Req, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth_credentials.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
+import { User } from './user.entity';
+import { GetUser } from './get-user.decorator';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private tasksService: AuthService) {}
+
+  /*
+   *  POST
+   */
+
+  @Get()
+  getUsers(): Promise<User[]> {
+    return this.tasksService.getUsers();
+  }
+
+  @Get('/getCurrent')
+  @UseGuards(AuthGuard())
+  getMyUser(@GetUser() user: User): Promise<User> {
+    return this.tasksService.getUser(user);
+  }
+
+  /*
+   *  POST
+   */
 
   @Post('/signUp')
   @ApiBody({

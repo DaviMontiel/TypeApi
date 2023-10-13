@@ -1,4 +1,10 @@
-import { Injectable, ConflictException, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  InternalServerErrorException,
+  UnauthorizedException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { AuthCredentialsDto } from './dto/auth_credentials.dto';
@@ -19,6 +25,27 @@ export class AuthService {
    * GET
    */
 
+  async getUsers(): Promise<User[]> {
+    const query = this.repository.createQueryBuilder('users');
+
+    return query.getMany();
+  }
+
+  async getUser(user: User): Promise<User> {
+    const { id } = user;
+    try {
+      const found = await this.repository.findOne({ where: { id } });
+
+      if (!found) {
+        throw new NotFoundException();
+      }
+
+      return found;
+    } catch (ex) {
+      throw new NotFoundException();
+    }
+  }
+
   /*
    * POST
    */
@@ -28,9 +55,6 @@ export class AuthService {
 
     const salt = await bcrypt.genSalt();
     const hashedPasswd = await bcrypt.hash(passwd, salt);
-
-    console.log('salt', salt);
-    console.log('hashedPasswd', hashedPasswd);
 
     const user = this.repository.create({ userName, passwd: hashedPasswd });
 
